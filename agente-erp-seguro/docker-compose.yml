@@ -1,0 +1,26 @@
+# Odoo local opcional para probar el backend real.
+# Tras arrancar: http://localhost:8069 -> crea la BD "odoo" e instala CRM, Ventas y Compras.
+# Genera una API key en: Preferencias de usuario > Seguridad de la cuenta > Nueva clave API.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - odoo-db:/var/lib/postgresql/data
+  odoo:
+    image: odoo:18.0
+    depends_on: [db]
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - odoo-data:/var/lib/odoo
+volumes:
+  odoo-db:
+  odoo-data:
